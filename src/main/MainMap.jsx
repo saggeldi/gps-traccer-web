@@ -17,9 +17,10 @@ import MapOverlay from '../map/overlay/MapOverlay';
 import MapGeocoder from '../map/geocoder/MapGeocoder';
 import MapScale from '../map/MapScale';
 import MapNotification from '../map/notification/MapNotification';
+import MapFullscreen from '../map/MapFullscreen';
 import useFeatures from '../common/util/useFeatures';
 
-const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
+const MainMap = ({ filteredPositions, selectedPosition, onEventsClick, fullscreen, onFullscreenClick }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -51,13 +52,19 @@ const MainMap = ({ filteredPositions, selectedPosition, onEventsClick }) => {
         <PoiMap />
       </MapView>
       <MapScale />
-      <MapCurrentLocation />
-      <MapGeocoder />
-      {!features.disableEvents && (
-        <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
-      )}
-      {desktop && (
-        <MapPadding start={parseInt(theme.dimensions.drawerWidthDesktop, 10) + parseInt(theme.spacing(1.5), 10)} />
+      <>
+        <MapCurrentLocation />
+        <MapGeocoder />
+        {!features.disableEvents && (
+            <MapNotification enabled={eventsAvailable} onClick={onEventsClick} />
+        )}
+        <MapFullscreen onToggle={onFullscreenClick} fullscreen={fullscreen} />
+      </>
+      {desktop && !fullscreen && (
+        <MapPadding 
+          end={parseInt(theme.dimensions.drawerWidthDesktop, 10) + parseInt(theme.spacing(1.5), 10)}
+          top={70}
+        />
       )}
     </>
   );

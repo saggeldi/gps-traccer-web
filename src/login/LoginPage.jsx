@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
-  useMediaQuery, Select, MenuItem, FormControl, Button, TextField, Link, Snackbar, IconButton, Tooltip, Box, InputAdornment,
+  Select, MenuItem, FormControl, Button, TextField, Link, Snackbar, IconButton, Tooltip, Box, InputAdornment,
 } from '@mui/material';
 import ReactCountryFlag from 'react-country-flag';
 import { makeStyles } from 'tss-react/mui';
 import CloseIcon from '@mui/icons-material/Close';
-import VpnLockIcon from '@mui/icons-material/VpnLock';
-import QrCode2Icon from '@mui/icons-material/QrCode2';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import SecurityIcon from '@mui/icons-material/Security';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useTheme } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sessionActions } from '../store';
@@ -19,7 +18,6 @@ import usePersistedState from '../common/util/usePersistedState';
 import {
   generateLoginToken, handleLoginTokenListeners, nativeEnvironment, nativePostMessage,
 } from '../common/components/NativeInterface';
-import LogoImage from './LogoImage';
 import { useCatch } from '../reactHelper';
 import QrCodeDialog from '../common/components/QrCodeDialog';
 import fetchOrThrow from '../common/util/fetchOrThrow';
@@ -57,7 +55,6 @@ const LoginPage = () => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const theme = useTheme();
   const t = useTranslation();
 
   const { languages, language, setLocalLanguage } = useLocalization();
@@ -149,13 +146,13 @@ const LoginPage = () => {
               open={showServerTooltip}
               arrow
             >
-              <VpnLockIcon />
+              <SecurityIcon />
             </Tooltip>
           </IconButton>
         )}
         {!nativeEnvironment && (
           <IconButton color="primary" onClick={() => setShowQr(true)}>
-            <QrCode2Icon />
+            <QrCodeScannerIcon />
           </IconButton>
         )}
         {languageEnabled && (
@@ -174,7 +171,6 @@ const LoginPage = () => {
         )}
       </div>
       <div className={classes.container}>
-        {useMediaQuery(theme.breakpoints.down('lg')) && <LogoImage color={theme.palette.primary.main} />}
         {!openIdForced && (
           <>
             <TextField
@@ -207,7 +203,7 @@ const LoginPage = () => {
                         edge="end"
                         size="small"
                       >
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        {showPassword ? <VisibilityOffIcon /> : <RemoveRedEyeIcon />}
                       </IconButton>
                     </InputAdornment>
                   ),

@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme, { miniVariant }) => ({
     display: 'flex',
     flexDirection: 'column',
     overflowY: 'auto',
+    width: '100%', // Ensure full width usage
   },
 }));
 
@@ -92,9 +93,11 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
 
   return (
     <div className={classes.root}>
+      <div className={classes.content}>{children}</div>
       {desktop ? (
         <Drawer
           variant="permanent"
+          anchor="right"
           className={classes.desktopDrawer}
           classes={{ paper: classes.desktopDrawer }}
         >
@@ -115,26 +118,26 @@ const PageLayout = ({ menu, breadcrumbs, children }) => {
           {menu}
         </Drawer>
       ) : (
-        <Drawer
-          variant="temporary"
-          open={openDrawer}
-          onClose={() => setOpenDrawer(false)}
-          classes={{ paper: classes.mobileDrawer }}
-        >
-          {menu}
-        </Drawer>
+        <>
+          <AppBar className={classes.mobileToolbar} position="static" color="inherit">
+            <Toolbar>
+              <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => setOpenDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+              <PageTitle breadcrumbs={breadcrumbs} />
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="temporary"
+            anchor="right"
+            open={openDrawer}
+            onClose={() => setOpenDrawer(false)}
+            classes={{ paper: classes.mobileDrawer }}
+          >
+            {menu}
+          </Drawer>
+        </>
       )}
-      {!desktop && (
-        <AppBar className={classes.mobileToolbar} position="static" color="inherit">
-          <Toolbar>
-            <IconButton color="inherit" edge="start" sx={{ mr: 2 }} onClick={() => setOpenDrawer(true)}>
-              <MenuIcon />
-            </IconButton>
-            <PageTitle breadcrumbs={breadcrumbs} />
-          </Toolbar>
-        </AppBar>
-      )}
-      <div className={classes.content}>{children}</div>
     </div>
   )
 };

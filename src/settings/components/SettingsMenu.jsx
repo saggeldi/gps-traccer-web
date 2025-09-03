@@ -7,10 +7,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import FolderIcon from '@mui/icons-material/Folder';
 import PersonIcon from '@mui/icons-material/Person';
 import StorageIcon from '@mui/icons-material/Storage';
-import BuildIcon from '@mui/icons-material/Build';
 import PeopleIcon from '@mui/icons-material/People';
-import TodayIcon from '@mui/icons-material/Today';
-import PublishIcon from '@mui/icons-material/Publish';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import HelpIcon from '@mui/icons-material/Help';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -80,46 +77,46 @@ const SettingsMenu = () => {
                 selected={location.pathname.startsWith('/settings/group')}
               />
             )}
-            {!features.disableDrivers && (
-              <MenuItem
-                title={t('sharedDrivers')}
-                link="/settings/drivers"
-                icon={<PersonIcon />}
-                selected={location.pathname.startsWith('/settings/driver')}
-              />
-            )}
-            {!features.disableCalendars && (
-              <MenuItem
-                title={t('sharedCalendars')}
-                link="/settings/calendars"
-                icon={<TodayIcon />}
-                selected={location.pathname.startsWith('/settings/calendar')}
-              />
-            )}
-            {!features.disableComputedAttributes && (
-              <MenuItem
-                title={t('sharedComputedAttributes')}
-                link="/settings/attributes"
-                icon={<StorageIcon />}
-                selected={location.pathname.startsWith('/settings/attribute')}
-              />
-            )}
-            {!features.disableMaintenance && (
-              <MenuItem
-                title={t('sharedMaintenance')}
-                link="/settings/maintenances"
-                icon={<BuildIcon />}
-                selected={location.pathname.startsWith('/settings/maintenance')}
-              />
-            )}
-            {!features.disableSavedCommands && (
-              <MenuItem
-                title={t('sharedSavedCommands')}
-                link="/settings/commands"
-                icon={<PublishIcon />}
-                selected={location.pathname.startsWith('/settings/command')}
-              />
-            )}
+            {/*{!features.disableDrivers && (*/}
+            {/*  <MenuItem*/}
+            {/*    title={t('sharedDrivers')}*/}
+            {/*    link="/settings/drivers"*/}
+            {/*    icon={<PersonIcon />}*/}
+            {/*    selected={location.pathname.startsWith('/settings/driver')}*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{!features.disableCalendars && (*/}
+            {/*  <MenuItem*/}
+            {/*    title={t('sharedCalendars')}*/}
+            {/*    link="/settings/calendars"*/}
+            {/*    icon={<TodayIcon />}*/}
+            {/*    selected={location.pathname.startsWith('/settings/calendar')}*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{!features.disableComputedAttributes && (*/}
+            {/*  <MenuItem*/}
+            {/*    title={t('sharedComputedAttributes')}*/}
+            {/*    link="/settings/attributes"*/}
+            {/*    icon={<StorageIcon />}*/}
+            {/*    selected={location.pathname.startsWith('/settings/attribute')}*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{!features.disableMaintenance && (*/}
+            {/*  <MenuItem*/}
+            {/*    title={t('sharedMaintenance')}*/}
+            {/*    link="/settings/maintenances"*/}
+            {/*    icon={<BuildIcon />}*/}
+            {/*    selected={location.pathname.startsWith('/settings/maintenance')}*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{!features.disableSavedCommands && (*/}
+            {/*  <MenuItem*/}
+            {/*    title={t('sharedSavedCommands')}*/}
+            {/*    link="/settings/commands"*/}
+            {/*    icon={<PublishIcon />}*/}
+            {/*    selected={location.pathname.startsWith('/settings/command')}*/}
+            {/*  />*/}
+            {/*)}*/}
           </>
         )}
         {billingLink && (

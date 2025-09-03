@@ -5,16 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import {
   Accordion, AccordionSummary, AccordionDetails, Typography, Container, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, FormGroup, InputAdornment, IconButton, OutlinedInput, Autocomplete, TextField, createFilterOptions, Button,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CachedIcon from '@mui/icons-material/Cached';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
 import { useTranslation, useTranslationKeys } from '../common/components/LocalizationProvider';
 import PageLayout from '../common/components/PageLayout';
 import SettingsMenu from './components/SettingsMenu';
 import usePositionAttributes from '../common/attributes/usePositionAttributes';
 import { prefixString, unprefixString } from '../common/util/stringUtils';
 import SelectField from '../common/components/SelectField';
-import useMapStyles from '../map/core/useMapStyles';
 import useMapOverlays from '../map/overlay/useMapOverlays';
 import { useCatch } from '../reactHelper';
 import { sessionActions } from '../store';
@@ -49,7 +48,6 @@ const PreferencesPage = () => {
   const [token, setToken] = useState(null);
   const [tokenExpiration, setTokenExpiration] = useState(dayjs().add(1, 'week').locale('en').format('YYYY-MM-DD'));
 
-  const mapStyles = useMapStyles();
   const mapOverlays = useMapOverlays();
 
   const positionAttributes = usePositionAttributes(t);
@@ -91,35 +89,19 @@ const PreferencesPage = () => {
         {!readonly && (
           <>
             <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
                 <Typography variant="subtitle1">
                   {t('mapTitle')}
                 </Typography>
               </AccordionSummary>
               <AccordionDetails className={classes.details}>
-                <FormControl>
-                  <InputLabel>{t('mapActive')}</InputLabel>
-                  <Select
-                    label={t('mapActive')}
-                    value={attributes.activeMapStyles?.split(',') || ['custom', 'locationIqStreets', 'locationIqDark', 'openFreeMap']}
-                    onChange={(e, child) => {
-                      const clicked = mapStyles.find((s) => s.id === child.props.value);
-                      if (clicked.available) {
-                        setAttributes({ ...attributes, activeMapStyles: e.target.value.join(',') });
-                      } else if (clicked.id !== 'custom') {
-                        const query = new URLSearchParams({ attribute: clicked.attribute });
-                        navigate(`/settings/user/${user.id}?${query.toString()}`);
-                      }
-                    }}
-                    multiple
-                  >
-                    {mapStyles.map((style) => (
-                      <MenuItem key={style.id} value={style.id}>
-                        <Typography component="span" color={style.available ? 'textPrimary' : 'error'}>{style.title}</Typography>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <TextField
+                  value={attributes.mapUrl || ''}
+                  onChange={(e) => setAttributes({ ...attributes, mapUrl: e.target.value })}
+                  label={t('mapCustomLabel')}
+                  placeholder="https://example.com/{z}/{x}/{y}.png"
+                  helperText="Enter your custom map tile URL with {z}, {x}, {y} placeholders"
+                />
                 <FormControl>
                   <InputLabel>{t('mapOverlay')}</InputLabel>
                   <Select
@@ -234,7 +216,7 @@ const PreferencesPage = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
                 <Typography variant="subtitle1">
                   {t('deviceTitle')}
                 </Typography>
@@ -257,7 +239,7 @@ const PreferencesPage = () => {
               </AccordionDetails>
             </Accordion>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
                 <Typography variant="subtitle1">
                   {t('sharedSound')}
                 </Typography>
@@ -285,7 +267,7 @@ const PreferencesPage = () => {
           </>
         )}
         <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
             <Typography variant="subtitle1">
               {t('userToken')}
             </Typography>
@@ -311,10 +293,10 @@ const PreferencesPage = () => {
                   <InputAdornment position="end">
                     <div className={classes.verticalActions}>
                       <IconButton size="small" edge="end" onClick={generateToken} disabled={!!token}>
-                        <CachedIcon fontSize="small" />
+                        <RefreshIcon fontSize="small" />
                       </IconButton>
                       <IconButton size="small" edge="end" onClick={() => navigator.clipboard.writeText(token)} disabled={!token}>
-                        <ContentCopyIcon fontSize="small" />
+                        <FileCopyIcon fontSize="small" />
                       </IconButton>
                     </div>
                   </InputAdornment>
@@ -326,7 +308,7 @@ const PreferencesPage = () => {
         {!readonly && (
           <>
             <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<KeyboardArrowDownIcon />}>
                 <Typography variant="subtitle1">
                   {t('sharedInfoTitle')}
                 </Typography>

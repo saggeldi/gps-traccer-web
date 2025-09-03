@@ -1,55 +1,58 @@
-import { useMediaQuery, Paper } from '@mui/material';
+import {Paper, Typography} from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-import { useTheme } from '@mui/material/styles';
-import LogoImage from './LogoImage';
+import backgroundImage from '../resources/images/background.jpg';
 
 const useStyles = makeStyles()((theme) => ({
   root: {
     display: 'flex',
-    height: '100%',
-  },
-  sidebar: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    background: theme.palette.primary.main,
-    paddingBottom: theme.spacing(5),
-    width: theme.dimensions.sidebarWidth,
-    [theme.breakpoints.down('lg')]: {
-      width: theme.dimensions.sidebarWidthTablet,
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '0px',
-    },
+    height: '100vh',
+    width: '100%',
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
   },
   paper: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    boxShadow: '-2px 0px 16px rgba(0, 0, 0, 0.25)',
-    [theme.breakpoints.up('lg')]: {
-      padding: theme.spacing(0, 25, 0, 0),
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: '20px',
+    boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+    border: theme.palette.mode === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.05)',
+    backdropFilter: 'blur(20px)',
+    padding: theme.spacing(5),
+    maxWidth: 420,
+    width: '90%',
+    transition: 'all 0.3s ease-in-out',
+    '&:hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: '0 25px 80px rgba(0,0,0,0.2)',
     },
   },
   form: {
-    maxWidth: theme.spacing(52),
-    padding: theme.spacing(5),
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
   },
 }));
 
 const LoginLayout = ({ children }) => {
   const { classes } = useStyles();
-  const theme = useTheme();
 
   return (
     <main className={classes.root}>
-      <div className={classes.sidebar}>
-        {!useMediaQuery(theme.breakpoints.down('lg')) && <LogoImage color={theme.palette.secondary.contrastText} />}
-      </div>
-      <Paper className={classes.paper}>
+      <Paper className={classes.paper} elevation={8}>
+        <Typography style={{
+          color: '#000000',
+          fontSize: '34px',
+          fontWeight: 'bold',
+          marginBottom: '10px',
+        }}> . </Typography>
         <form className={classes.form}>
           {children}
         </form>

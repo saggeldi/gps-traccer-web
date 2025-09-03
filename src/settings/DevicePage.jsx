@@ -11,6 +11,26 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MuiFileInput } from 'mui-file-input';
+import DevicesIcon from '@mui/icons-material/Devices';
+import PetsIcon from '@mui/icons-material/Pets';
+import PedalBikeIcon from '@mui/icons-material/PedalBike';
+import SailingIcon from '@mui/icons-material/Sailing';
+import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import DriveEtaIcon from '@mui/icons-material/DriveEta';
+import RvHookupIcon from '@mui/icons-material/RvHookup';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import HelicopterIcon from '@mui/icons-material/AirplanemodeActive';
+import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
+import PersonIcon from '@mui/icons-material/Person';
+import FlightIcon from '@mui/icons-material/Flight';
+import DirectionsBoatIcon from '@mui/icons-material/DirectionsBoat';
+import AgricultureIcon from '@mui/icons-material/Agriculture';
+import TrailerIcon from '@mui/icons-material/LocalShipping';
+import TrainIcon from '@mui/icons-material/Train';
+import TramIcon from '@mui/icons-material/Tram';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import ElectricScooterIcon from '@mui/icons-material/ElectricScooter';
 import EditItemView from './components/EditItemView';
 import EditAttributesAccordion from './components/EditAttributesAccordion';
 import SelectField from '../common/components/SelectField';
@@ -42,6 +62,29 @@ const DevicePage = () => {
   const [showQr, setShowQr] = useState(false);
   const [imageFile, setImageFile] = useState(null);
 
+  const categoryIcons = {
+    default: DevicesIcon,
+    animal: PetsIcon,
+    bicycle: PedalBikeIcon,
+    boat: SailingIcon,
+    bus: DirectionsBusIcon,
+    car: DriveEtaIcon,
+    camper: RvHookupIcon,
+    crane: PrecisionManufacturingIcon,
+    helicopter: HelicopterIcon,
+    motorcycle: TwoWheelerIcon,
+    person: PersonIcon,
+    plane: FlightIcon,
+    ship: DirectionsBoatIcon,
+    tractor: AgricultureIcon,
+    trailer: TrailerIcon,
+    train: TrainIcon,
+    tram: TramIcon,
+    truck: LocalShippingIcon,
+    van: LocalShippingOutlinedIcon,
+    scooter: ElectricScooterIcon,
+  };
+
   const handleFileInput = useCatch(async (newFile) => {
     setImageFile(newFile);
     if (newFile && item?.id) {
@@ -50,10 +93,24 @@ const DevicePage = () => {
         body: newFile,
       });
       setItem({ ...item, attributes: { ...item.attributes, deviceImage: await response.text() } });
+    } else if (newFile && !item?.id) {
+      // For new devices, set the attribute immediately to show in form
+      const extension = newFile.name.split('.').pop();
+      setItem({ ...item, attributes: { ...item.attributes, deviceImage: `device.${extension}` } });
     } else if (!newFile) {
+      // Remove image attribute when file is cleared
       // eslint-disable-next-line no-unused-vars
       const { deviceImage, ...remainingAttributes } = item.attributes || {};
       setItem({ ...item, attributes: remainingAttributes });
+    }
+  });
+
+  const handleItemSaved = useCatch(async (savedItem) => {
+    if (imageFile && savedItem?.id) {
+      await fetchOrThrow(`/api/devices/${savedItem.id}/image`, {
+        method: 'POST',
+        body: imageFile,
+      });
     }
   });
 
@@ -65,6 +122,7 @@ const DevicePage = () => {
       item={item}
       setItem={setItem}
       validate={validate}
+      onItemSaved={handleItemSaved}
       menu={<SettingsMenu />}
       breadcrumbs={['settingsTitle', 'sharedDevice']}
     >
@@ -127,6 +185,7 @@ const DevicePage = () => {
                   name: t(`category${category.replace(/^\w/, (c) => c.toUpperCase())}`),
                 })).sort((a, b) => a.name.localeCompare(b.name))}
                 label={t('deviceCategory')}
+                iconGetter={(option) => categoryIcons[option.id]}
               />
               <SelectField
                 value={item.calendarId}
@@ -159,23 +218,21 @@ const DevicePage = () => {
               </Button>
             </AccordionDetails>
           </Accordion>
-          {item.id && (
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="subtitle1">
-                  {t('attributeDeviceImage')}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails className={classes.details}>
-                <MuiFileInput
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="subtitle1">
+                {t('attributeDeviceImage')}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.details}>
+              <MuiFileInput
                   placeholder={t('attributeDeviceImage')}
                   value={imageFile}
                   onChange={handleFileInput}
                   inputProps={{ accept: 'image/*' }}
-                />
-              </AccordionDetails>
-            </Accordion>
-          )}
+              />
+            </AccordionDetails>
+          </Accordion>
           <EditAttributesAccordion
             attributes={item.attributes}
             setAttributes={(attributes) => setItem({ ...item, attributes })}

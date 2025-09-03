@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
     },
   },
   drawer: {
-    zIndex: 1,
+    zIndex: 1200,
   },
   drawerPaper: {
     position: 'relative',
@@ -100,7 +100,7 @@ const EmulatorPage = () => {
       <div className={classes.content}>
         <Drawer
           className={classes.drawer}
-          anchor={isPhone ? 'top' : 'left'}
+          anchor={isPhone ? 'top' : 'right'}
           variant="permanent"
           classes={{ paper: classes.drawerPaper }}
         >

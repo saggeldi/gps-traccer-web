@@ -15,6 +15,7 @@ import EventsDrawer from './EventsDrawer';
 import useFilter from './useFilter';
 import MainToolbar from './MainToolbar';
 import MainMap from './MainMap';
+import MainNavbar from './MainNavbar';
 import { useAttributePreference } from '../common/util/preferences';
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,9 +28,9 @@ const useStyles = makeStyles()((theme) => ({
     flexDirection: 'column',
     [theme.breakpoints.up('md')]: {
       position: 'fixed',
-      left: 0,
-      top: 0,
-      height: `calc(100% - ${theme.spacing(3)})`,
+      right: 0,
+      top: '70px', // Account for navbar height
+      height: `calc(100% - 70px - ${theme.spacing(3)})`,
       width: theme.dimensions.drawerWidthDesktop,
       margin: theme.spacing(1.5),
       zIndex: 3,
@@ -60,6 +61,15 @@ const useStyles = makeStyles()((theme) => ({
     gridArea: '1 / 1',
     zIndex: 4,
   },
+  fullscreenMap: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 1200,
+    backgroundColor: theme.palette.background.default,
+  },
 }));
 
 const MainPage = () => {
@@ -88,6 +98,7 @@ const MainPage = () => {
 
   const [devicesOpen, setDevicesOpen] = useState(desktop);
   const [eventsOpen, setEventsOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   const onEventsClick = useCallback(() => setEventsOpen(true), [setEventsOpen]);
 
@@ -101,51 +112,77 @@ const MainPage = () => {
 
   return (
     <div className={classes.root}>
-      {desktop && (
+      {!fullscreen && desktop && <MainNavbar />}
+      {!fullscreen && desktop && (
         <MainMap
           filteredPositions={filteredPositions}
           selectedPosition={selectedPosition}
           onEventsClick={onEventsClick}
+          fullscreen={fullscreen}
+          onFullscreenClick={() => setFullscreen(!fullscreen)}
         />
       )}
-      <div className={classes.sidebar}>
-        <Paper square elevation={3} className={classes.header}>
-          <MainToolbar
-            filteredDevices={filteredDevices}
-            devicesOpen={devicesOpen}
-            setDevicesOpen={setDevicesOpen}
-            keyword={keyword}
-            setKeyword={setKeyword}
-            filter={filter}
-            setFilter={setFilter}
-            filterSort={filterSort}
-            setFilterSort={setFilterSort}
-            filterMap={filterMap}
-            setFilterMap={setFilterMap}
-          />
-        </Paper>
-        <div className={classes.middle}>
-          {!desktop && (
-            <div className={classes.contentMap}>
-              <MainMap
-                filteredPositions={filteredPositions}
-                selectedPosition={selectedPosition}
-                onEventsClick={onEventsClick}
-              />
+      {!fullscreen && (
+        <div className={classes.sidebar} style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          gap: "14px"
+        }}>
+          <Paper square elevation={3} className={classes.header}>
+            <MainToolbar
+              filteredDevices={filteredDevices}
+              devicesOpen={devicesOpen}
+              setDevicesOpen={setDevicesOpen}
+              keyword={keyword}
+              setKeyword={setKeyword}
+              filter={filter}
+              setFilter={setFilter}
+              filterSort={filterSort}
+              setFilterSort={setFilterSort}
+              filterMap={filterMap}
+              setFilterMap={setFilterMap}
+            />
+          </Paper>
+          <div className={classes.middle}>
+            {!desktop && (
+              <div className={classes.contentMap}>
+                <MainMap
+                  filteredPositions={filteredPositions}
+                  selectedPosition={selectedPosition}
+                  onEventsClick={onEventsClick}
+                  fullscreen={fullscreen}
+                  onFullscreenClick={() => setFullscreen(!fullscreen)}
+                />
+              </div>
+            )}
+            <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
+              <DeviceList devices={filteredDevices} />
+            </Paper>
+          </div>
+          {desktop && (
+            <div className={classes.footer}>
+              <BottomMenu />
             </div>
           )}
-          <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
-            <DeviceList devices={filteredDevices} />
-          </Paper>
         </div>
-        {desktop && (
-          <div className={classes.footer}>
-            <BottomMenu />
-          </div>
-        )}
-      </div>
-      <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />
-      {selectedDeviceId && (
+      )}
+      
+      {/* Fullscreen Map View */}
+      {fullscreen && (
+        <div className={classes.fullscreenMap}>
+          <MainMap
+            filteredPositions={filteredPositions}
+            selectedPosition={selectedPosition}
+            onEventsClick={onEventsClick}
+            fullscreen={fullscreen}
+            onFullscreenClick={() => setFullscreen(!fullscreen)}
+          />
+        </div>
+      )}
+      
+      {!fullscreen && <EventsDrawer open={eventsOpen} onClose={() => setEventsOpen(false)} />}
+      {!fullscreen && selectedDeviceId && (
         <StatusCard
           deviceId={selectedDeviceId}
           position={selectedPosition}

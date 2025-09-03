@@ -3,12 +3,9 @@ import maplibregl from 'maplibre-gl';
 import { googleProtocol } from 'maplibre-google-maps';
 import React, {
   useRef, useLayoutEffect, useEffect, useState,
-  useMemo,
 } from 'react';
 import { useTheme } from '@mui/material';
-import { SwitcherControl } from '../switcher/switcher';
-import { useAttributePreference, usePreference } from '../../common/util/preferences';
-import usePersistedState, { savePersistedState } from '../../common/util/usePersistedState';
+import { useAttributePreference } from '../../common/util/preferences';
 import { mapImages } from './preloadImages';
 import useMapStyles from './useMapStyles';
 import { useEffectAsync } from '../../reactHelper';
@@ -66,6 +63,7 @@ const initMap = async () => {
       });
     });
   }
+  updateReadyValue(true);
 };
 
 const MapView = ({ children }) => {
@@ -76,28 +74,9 @@ const MapView = ({ children }) => {
   const [mapReady, setMapReady] = useState(false);
 
   const mapStyles = useMapStyles();
-  const activeMapStyles = useAttributePreference('activeMapStyles', 'custom,locationIqStreets,locationIqDark,openFreeMap');
-  const [defaultMapStyle] = usePersistedState('selectedMapStyle', usePreference('map', 'custom'));
   const mapboxAccessToken = useAttributePreference('mapboxAccessToken');
   const maxZoom = useAttributePreference('web.maxZoom');
 
-  const switcher = useMemo(() => new SwitcherControl(
-    () => updateReadyValue(false),
-    (styleId) => savePersistedState('selectedMapStyle', styleId),
-    () => {
-      map.once('styledata', () => {
-        const waiting = () => {
-          if (!map.loaded()) {
-            setTimeout(waiting, 33);
-          } else {
-            initMap();
-            updateReadyValue(true);
-          }
-        };
-        waiting();
-      });
-    },
-  ), []);
 
   useEffectAsync(async () => {
     if (theme.direction === 'rtl') {
@@ -108,15 +87,13 @@ const MapView = ({ children }) => {
   useEffect(() => {
     const attribution = new maplibregl.AttributionControl({ compact: true });
     const navigation = new maplibregl.NavigationControl();
-    map.addControl(attribution, theme.direction === 'rtl' ? 'bottom-left' : 'bottom-right');
-    map.addControl(navigation, theme.direction === 'rtl' ? 'top-left' : 'top-right');
-    map.addControl(switcher, theme.direction === 'rtl' ? 'top-left' : 'top-right');
+    map.addControl(attribution, theme.direction === 'rtl' ? 'bottom-right' : 'bottom-left');
+    map.addControl(navigation, theme.direction === 'rtl' ? 'top-right' : 'top-left');
     return () => {
-      map.removeControl(switcher);
       map.removeControl(navigation);
       map.removeControl(attribution);
     };
-  }, [theme.direction, switcher]);
+  }, [theme.direction]);
 
   useEffect(() => {
     if (maxZoom) {
@@ -129,10 +106,26 @@ const MapView = ({ children }) => {
   }, [mapboxAccessToken]);
 
   useEffect(() => {
-    const filteredStyles = mapStyles.filter((s) => s.available && activeMapStyles.includes(s.id));
-    const styles = filteredStyles.length ? filteredStyles : mapStyles.filter((s) => s.id === 'osm');
-    switcher.updateStyles(styles, defaultMapStyle);
-  }, [mapStyles, defaultMapStyle, activeMapStyles, switcher]);
+    const customStyle = mapStyles.find(s => s.id === 'custom');
+    
+    // Always use custom map style if available
+    if (customStyle && customStyle.available && customStyle.style) {
+      updateReadyValue(false);
+      map.setStyle(customStyle.style, { diff: false });
+      map.setTransformRequest(customStyle.transformRequest);
+      
+      map.once('styledata', () => {
+        const waiting = () => {
+          if (!map.loaded()) {
+            setTimeout(waiting, 33);
+          } else {
+            initMap();
+          }
+        };
+        waiting();
+      });
+    }
+  }, [mapStyles]);
 
   useEffect(() => {
     const listener = (ready) => setMapReady(ready);

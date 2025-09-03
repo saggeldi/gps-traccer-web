@@ -90,7 +90,7 @@ const useStyles = makeStyles()((theme, { desktopPadding }) => ({
     zIndex: 5,
     left: '50%',
     [theme.breakpoints.up('md')]: {
-      left: `calc(50% + ${desktopPadding} / 2)`,
+      left: `calc(50% - ${desktopPadding} / 2)`,
       bottom: theme.spacing(3),
     },
     [theme.breakpoints.down('md')]: {

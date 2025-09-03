@@ -1,7 +1,7 @@
 import {
   AppBar, Toolbar, Typography, IconButton,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 const Navbar = ({ setOpenDrawer, title }) => (
   <AppBar position="sticky" color="inherit">
@@ -12,7 +12,7 @@ const Navbar = ({ setOpenDrawer, title }) => (
         sx={{ mr: 2 }}
         onClick={() => setOpenDrawer(true)}
       >
-        <MenuIcon />
+        <DashboardIcon />
       </IconButton>
       <Typography variant="h6" noWrap>
         {title}

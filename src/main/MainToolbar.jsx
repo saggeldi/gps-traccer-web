@@ -6,10 +6,10 @@ import {
 } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { useTheme } from '@mui/material/styles';
-import MapIcon from '@mui/icons-material/Map';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import AddIcon from '@mui/icons-material/Add';
-import TuneIcon from '@mui/icons-material/Tune';
+import ExploreIcon from '@mui/icons-material/Explore';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { useDeviceReadonly } from '../common/util/permissions';
 import DeviceRow from './DeviceRow';
@@ -61,7 +61,7 @@ const MainToolbar = ({
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
       <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
-        {devicesOpen ? <MapIcon /> : <ViewListIcon />}
+        {devicesOpen ? <ExploreIcon /> : <FormatListBulletedIcon />}
       </IconButton>
       <OutlinedInput
         ref={inputRef}
@@ -74,7 +74,7 @@ const MainToolbar = ({
           <InputAdornment position="end">
             <IconButton size="small" edge="end" onClick={() => setFilterAnchorEl(inputRef.current)}>
               <Badge color="info" variant="dot" invisible={!filter.statuses.length && !filter.groups.length}>
-                <TuneIcon fontSize="small" />
+                <FilterListIcon fontSize="small" />
               </Badge>
             </IconButton>
           </InputAdornment>
@@ -171,7 +171,7 @@ const MainToolbar = ({
       </Popover>
       <IconButton edge="end" onClick={() => navigate('/settings/device')} disabled={deviceReadonly}>
         <Tooltip open={!deviceReadonly && Object.keys(devices).length === 0} title={t('deviceRegisterFirst')} arrow>
-          <AddIcon />
+          <AddCircleIcon />
         </Tooltip>
       </IconButton>
     </Toolbar>

@@ -24,7 +24,7 @@ const useStyles = makeStyles()(() => ({
     flexDirection: 'column',
   },
   toolbar: {
-    zIndex: 1,
+    zIndex: 1200,
   },
   mapContainer: {
     flexGrow: 1,

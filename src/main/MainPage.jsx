@@ -29,8 +29,8 @@ const useStyles = makeStyles()((theme) => ({
     [theme.breakpoints.up('md')]: {
       position: 'fixed',
       right: 0,
-      top: '70px', // Account for navbar height
-      height: `calc(100% - 70px - ${theme.spacing(3)})`,
+      top: 0,
+      height: `calc(100% - ${theme.spacing(3)})`,
       width: theme.dimensions.drawerWidthDesktop,
       margin: theme.spacing(1.5),
       zIndex: 3,
@@ -156,7 +156,16 @@ const MainPage = () => {
                 />
               </div>
             )}
-            <Paper square className={classes.contentList} style={devicesOpen ? {} : { visibility: 'hidden' }}>
+            <Paper 
+              square 
+              className={classes.contentList} 
+              sx={{
+                transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
+                opacity: devicesOpen ? 1 : 0,
+                transform: devicesOpen ? 'translateX(0)' : 'translateX(-100%)',
+                pointerEvents: devicesOpen ? 'auto' : 'none'
+              }}
+            >
               <DeviceList devices={filteredDevices} />
             </Paper>
           </div>

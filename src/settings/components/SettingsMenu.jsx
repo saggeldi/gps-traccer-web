@@ -77,14 +77,14 @@ const SettingsMenu = () => {
                 selected={location.pathname.startsWith('/settings/group')}
               />
             )}
-            {/*{!features.disableDrivers && (*/}
-            {/*  <MenuItem*/}
-            {/*    title={t('sharedDrivers')}*/}
-            {/*    link="/settings/drivers"*/}
-            {/*    icon={<PersonIcon />}*/}
-            {/*    selected={location.pathname.startsWith('/settings/driver')}*/}
-            {/*  />*/}
-            {/*)}*/}
+            {!features.disableDrivers && (
+              <MenuItem
+                title={t('sharedDrivers')}
+                link="/settings/drivers"
+                icon={<PersonIcon />}
+                selected={location.pathname.startsWith('/settings/driver')}
+              />
+            )}
             {/*{!features.disableCalendars && (*/}
             {/*  <MenuItem*/}
             {/*    title={t('sharedCalendars')}*/}
@@ -93,14 +93,14 @@ const SettingsMenu = () => {
             {/*    selected={location.pathname.startsWith('/settings/calendar')}*/}
             {/*  />*/}
             {/*)}*/}
-            {/*{!features.disableComputedAttributes && (*/}
-            {/*  <MenuItem*/}
-            {/*    title={t('sharedComputedAttributes')}*/}
-            {/*    link="/settings/attributes"*/}
-            {/*    icon={<StorageIcon />}*/}
-            {/*    selected={location.pathname.startsWith('/settings/attribute')}*/}
-            {/*  />*/}
-            {/*)}*/}
+            {!features.disableComputedAttributes && (
+              <MenuItem
+                title={t('sharedComputedAttributes')}
+                link="/settings/attributes"
+                icon={<StorageIcon />}
+                selected={location.pathname.startsWith('/settings/attribute')}
+              />
+            )}
             {/*{!features.disableMaintenance && (*/}
             {/*  <MenuItem*/}
             {/*    title={t('sharedMaintenance')}*/}

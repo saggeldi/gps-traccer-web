@@ -12,8 +12,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Menu,
-  MenuItem,
   CardMedia,
   TableFooter,
   Link,
@@ -22,10 +20,11 @@ import {
 import { makeStyles } from 'tss-react/mui';
 import CloseIcon from '@mui/icons-material/Close';
 import ReplayIcon from '@mui/icons-material/Replay';
-import PublishIcon from '@mui/icons-material/Publish';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import PendingIcon from '@mui/icons-material/Pending';
+import PlaceIcon from '@mui/icons-material/Place';
+import ShareIcon from '@mui/icons-material/Share';
+import MapIcon from '@mui/icons-material/Map';
 
 import { useTranslation } from './LocalizationProvider';
 import RemoveDialog from './RemoveDialog';
@@ -137,7 +136,6 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const navigationAppLink = useAttributePreference('navigationAppLink');
   const navigationAppTitle = useAttributePreference('navigationAppTitle');
 
-  const [anchorEl, setAnchorEl] = useState(null);
 
   const [removing, setRemoving] = useState(false);
 
@@ -238,13 +236,13 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                 </CardContent>
               )}
               <CardActions classes={{ root: classes.actions }} disableSpacing>
-                <Tooltip title={t('sharedExtra')}>
+                <Tooltip title={t('sharedGeofence')}>
                   <IconButton
                     color="secondary"
-                    onClick={(e) => setAnchorEl(e.currentTarget)}
+                    onClick={handleGeofence}
                     disabled={!position}
                   >
-                    <PendingIcon />
+                    <PlaceIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('reportReplay')}>
@@ -255,12 +253,24 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     <ReplayIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={t('commandTitle')}>
+                {!shareDisabled && !user.temporary && (
+                  <Tooltip title={t('deviceShare')}>
+                    <IconButton
+                      onClick={() => navigate(`/settings/device/${deviceId}/share`)}
+                      disabled={disableActions}
+                    >
+                      <ShareIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                <Tooltip title={t('linkGoogleMaps')}>
                   <IconButton
-                    onClick={() => navigate(`/settings/device/${deviceId}/command`)}
-                    disabled={disableActions}
+                    component="a"
+                    target="_blank"
+                    href={`https://www.google.com/maps/search/?api=1&query=${position?.latitude}%2C${position?.longitude}`}
+                    disabled={!position}
                   >
-                    <PublishIcon />
+                    <MapIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t('sharedEdit')}>
@@ -271,32 +281,11 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={t('sharedRemove')}>
-                  <IconButton
-                    color="error"
-                    onClick={() => setRemoving(true)}
-                    disabled={disableActions || deviceReadonly}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
               </CardActions>
             </Card>
           </Rnd>
         )}
       </div>
-      {position && (
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
-          {!readonly && <MenuItem onClick={handleGeofence}>{t('sharedCreateGeofence')}</MenuItem>}
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/search/?api=1&query=${position.latitude}%2C${position.longitude}`}>{t('linkGoogleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`http://maps.apple.com/?ll=${position.latitude},${position.longitude}`}>{t('linkAppleMaps')}</MenuItem>
-          <MenuItem component="a" target="_blank" href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${position.latitude}%2C${position.longitude}&heading=${position.course}`}>{t('linkStreetView')}</MenuItem>
-          {navigationAppTitle && <MenuItem component="a" target="_blank" href={navigationAppLink.replace('{latitude}', position.latitude).replace('{longitude}', position.longitude)}>{navigationAppTitle}</MenuItem>}
-          {!shareDisabled && !user.temporary && (
-            <MenuItem onClick={() => navigate(`/settings/device/${deviceId}/share`)}><Typography color="secondary">{t('deviceShare')}</Typography></MenuItem>
-          )}
-        </Menu>
-      )}
       <RemoveDialog
         open={removing}
         endpoint="devices"

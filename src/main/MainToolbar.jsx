@@ -60,7 +60,19 @@ const MainToolbar = ({
 
   return (
     <Toolbar ref={toolbarRef} className={classes.toolbar}>
-      <IconButton edge="start" onClick={() => setDevicesOpen(!devicesOpen)}>
+      <IconButton 
+        edge="start" 
+        onClick={() => setDevicesOpen(!devicesOpen)}
+        sx={{
+          transition: 'all 0.2s ease-in-out',
+          '& .MuiSvgIcon-root': {
+            transition: 'transform 0.2s ease-in-out',
+          },
+          '&:hover': {
+            transform: 'scale(1.1)',
+          }
+        }}
+      >
         {devicesOpen ? <ExploreIcon /> : <FormatListBulletedIcon />}
       </IconButton>
       <OutlinedInput

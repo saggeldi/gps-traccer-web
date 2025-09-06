@@ -249,82 +249,93 @@ const MainNavbar = () => {
 
   return (
     <>
-      <AppBar position="fixed" className={classes.appBar} color="default" elevation={0}>
-        <Toolbar className={classes.toolbar}>
-          <Box className={classes.logo} onClick={handleLogoClick}>
-            <LogoImage color={theme.palette.primary.contrastText} />
-          </Box>
-          
-          <Box className={classes.rightSection}>
-            {desktop && (
-              <>
-                <IconButton
-                  className={`${classes.navButton} ${classes.mapButton}`}
-                  onClick={() => handleNavigation('/')}
-                  color="inherit"
-                  size="medium"
-                  title={t('mapTitle')}
-                >
-                  <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
-                    <ExploreIcon />
-                  </Badge>
-                </IconButton>
-                {!disableReports && (
-                  <IconButton
-                    className={`${classes.navButton} ${classes.reportsButton}`}
-                    onClick={() => handleNavigation('/reports/combined')}
-                    color="inherit"
-                    size="medium"
-                    title={t('reportTitle')}
-                  >
-                    <AssessmentIcon />
-                  </IconButton>
-                )}
-                <IconButton
-                  className={`${classes.navButton} ${classes.settingsButton}`}
-                  onClick={() => handleNavigation('/settings/preferences')}
-                  color="inherit"
-                  size="medium"
-                  title={t('settingsTitle')}
-                >
-                  <TuneIcon />
-                </IconButton>
-                {readonly ? (
-                  <IconButton
-                    className={classes.profileButton}
-                    onClick={handleLogout}
-                    color="inherit"
-                    size="medium"
-                    title={t('loginLogout')}
-                  >
-                    <LogoutIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    className={classes.profileButton}
-                    onClick={handleAccountClick}
-                    color="inherit"
-                    size="medium"
-                    title={t('settingsUser')}
-                  >
-                    <AccountCircleIcon />
-                  </IconButton>
-                )}
-              </>
-            )}
-            {!desktop && (
-              <IconButton
-                className={classes.profileButton}
-                onClick={handleProfileClick}
-                color="inherit"
-                size="medium"
-              >
-                <AccountCircleIcon />
-              </IconButton>
-            )}
-          </Box>
-        </Toolbar>
-      </AppBar>
+      {desktop && (
+        <Box 
+          sx={{
+            position: "fixed",
+            top: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 4,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 3,
+            padding: 1,
+            borderRadius: '16px',
+            backgroundColor: theme.palette.mode === 'dark'
+              ? 'rgb(0,0,0)'
+              : 'rgb(255,255,255)',
+            backdropFilter: 'blur(10px)',
+            border: theme.palette.mode === 'dark'
+              ? '1px solid rgba(255, 255, 255, 0.1)'
+              : '1px solid rgba(255, 255, 255, 0.2)',
+          }}
+        >
+          <IconButton
+            className={`${classes.navButton} ${classes.mapButton}`}
+            onClick={() => handleNavigation('/')}
+            color="inherit"
+            size="large"
+            title={t('mapTitle')}
+          >
+            <Badge color="error" variant="dot" overlap="circular" invisible={socket !== false}>
+              <ExploreIcon />
+            </Badge>
+          </IconButton>
+          {!disableReports && (
+            <IconButton
+              className={`${classes.navButton} ${classes.reportsButton}`}
+              onClick={() => handleNavigation('/reports/combined')}
+              color="inherit"
+              size="large"
+              title={t('reportTitle')}
+            >
+              <AssessmentIcon />
+            </IconButton>
+          )}
+          <IconButton
+            className={`${classes.navButton} ${classes.settingsButton}`}
+            onClick={() => handleNavigation('/settings/preferences')}
+            color="inherit"
+            size="large"
+            title={t('settingsTitle')}
+          >
+            <TuneIcon />
+          </IconButton>
+          {readonly ? (
+            <IconButton
+              className={classes.profileButton}
+              onClick={handleLogout}
+              color="inherit"
+              size="large"
+              title={t('loginLogout')}
+            >
+              <LogoutIcon />
+            </IconButton>
+          ) : (
+            <IconButton
+              className={classes.profileButton}
+              onClick={handleAccountClick}
+              color="inherit"
+              size="large"
+              title={t('settingsUser')}
+            >
+              <AccountCircleIcon />
+            </IconButton>
+          )}
+        </Box>
+      )}
+
+      {!desktop && (
+        <IconButton
+          className={classes.profileButton}
+          onClick={handleProfileClick}
+          color="inherit"
+          size="medium"
+        >
+          <AccountCircleIcon />
+        </IconButton>
+      )}
 
       {/* Profile Menu */}
       <Menu 

@@ -23,7 +23,7 @@ root.render(
           <AppThemeProvider>
             <CssBaseline />
             <ServerProvider>
-              <BrowserRouter basename="/web">
+              <BrowserRouter>
                 <Navigation />
               </BrowserRouter>
               <ErrorHandler />

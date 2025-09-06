@@ -5,7 +5,6 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ReplayIcon from '@mui/icons-material/Replay';
-import PublishIcon from '@mui/icons-material/Publish';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import PlaceIcon from '@mui/icons-material/Place';
 import BatteryFullIcon from '@mui/icons-material/BatteryFull';
@@ -137,10 +136,6 @@ const DeviceRow = ({ data, index, style }) => {
     navigate(`/replay?deviceId=${item.id}`);
   };
 
-  const handleCommands = (e) => {
-    e.stopPropagation();
-    navigate(`/settings/device/${item.id}/command`);
-  };
 
   const handleGeofence = (e) => {
     e.stopPropagation();
@@ -234,15 +229,6 @@ const DeviceRow = ({ data, index, style }) => {
             </IconButton>
           </Tooltip>
           
-          <Tooltip title={t('commandTitle')}>
-            <IconButton 
-              className={classes.actionButton}
-              onClick={handleCommands}
-              size="small"
-            >
-              <PublishIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
           
           <Tooltip title={t('sharedGeofences')}>
             <IconButton 

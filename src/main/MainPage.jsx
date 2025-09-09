@@ -127,7 +127,8 @@ const MainPage = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          gap: "14px"
+          gap: "14px",
+          marginTop: desktop? "90px" : "0",
         }}>
           <Paper square elevation={3} className={classes.header}>
             <MainToolbar
@@ -163,10 +164,13 @@ const MainPage = () => {
                 transition: 'opacity 0.3s ease-in-out, transform 0.3s ease-in-out',
                 opacity: devicesOpen ? 1 : 0,
                 transform: devicesOpen ? 'translateX(0)' : 'translateX(-100%)',
-                pointerEvents: devicesOpen ? 'auto' : 'none'
+                pointerEvents: devicesOpen ? 'auto' : 'none',
+                paddingBottom: desktop ? "10px" : "0px",
+                marginBottom: desktop ? "70px" : "0px",
               }}
             >
               <DeviceList devices={filteredDevices} />
+              {!desktop && <MainNavbar />}
             </Paper>
           </div>
           {desktop && (

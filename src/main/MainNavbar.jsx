@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
-  AppBar,
-  Toolbar,
   IconButton,
   Menu,
   MenuItem,
@@ -24,11 +22,11 @@ import { sessionActions } from '../store';
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { nativePostMessage } from '../common/components/NativeInterface';
 import { useRestriction } from '../common/util/permissions';
-import LogoImage from '../login/LogoImage';
 
 const useStyles = makeStyles()((theme) => ({
   appBar: {
     height: '70px',
+    width: '100%',
     zIndex: 4,
     borderRadius: "0",
     backgroundColor: theme.palette.mode === 'dark' 
@@ -243,24 +241,22 @@ const MainNavbar = () => {
     dispatch(sessionActions.updateUser(null));
   };
 
-  const handleLogoClick = () => {
-    navigate('/');
-  };
-
   return (
     <>
       {desktop && (
         <Box 
           sx={{
             position: "fixed",
-            top: 24,
-            left: "50%",
-            transform: "translateX(-50%)",
+            top: 14,
+            right: 0,
             zIndex: 4,
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: 3,
             padding: 1,
+            minWidth: "360px",
+            marginRight: "12px",
             borderRadius: '16px',
             backgroundColor: theme.palette.mode === 'dark'
               ? 'rgb(0,0,0)'
